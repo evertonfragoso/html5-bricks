@@ -25,11 +25,17 @@ function drawBall() {
   ctx.fill();
   ctx.closePath();
 
-  if ((ballX + dx) > (canvas.width - ballRadius) || ballX + dx < ballRadius) {
+  if (ballX + dx > canvas.width-ballRadius || ballX + dx < ballRadius) {
     dx = -dx;
   }
-  if ((ballY + dy) > (canvas.height - ballRadius) || ballY + dy < ballRadius) {
+  if (ballY + dy < ballRadius) {
     dy = -dy;
+  } else if (ballY + dy > canvas.height-ballRadius) {
+    if (ballX > paddleX && ballX < paddleX + paddleWidth) {
+      dy = -dy;
+    } else {
+      loseLife();
+    }
   }
 
   ballX += dx;
@@ -72,6 +78,12 @@ function keyUpHandler(e) {
   }
 }
 
+function loseLife() {
+  clearInterval(game); // Needed for Chrome to end game
+  var confirm = window.confirm('GAME OVER\n\nAgain?');
+  if (confirm) document.location.reload();
+}
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -82,4 +94,4 @@ function draw() {
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 
-setInterval(draw, 10);
+var game = setInterval(draw, 10);
