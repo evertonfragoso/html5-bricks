@@ -5,8 +5,10 @@ export default function Ball() {
 
   let radius = 10;
 
-  b.x = canvas.width / 2;
-  b.y = canvas.height - 50;
+  b.startX = canvas.width / 2;
+  b.startY = canvas.height - 50;
+  b.x = b.startX;
+  b.y = b.startY;
   b.colour = '#FF3333';
 
   b.draw = function() {
