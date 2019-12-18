@@ -5,7 +5,7 @@ var score = 0;
 var lives = 3;
 var fontColour = '#33EE33';
 
-var speed = 2;
+var speed = 3;
 
 var rightPressed = false;
 var leftPressed = false;
@@ -22,10 +22,10 @@ var dy = -speed;
 var paddleColour = '#EEEEEE';
 var paddleHeight = 10;
 var paddleWidth = 75;
-var paddleStartX = canvas.height - (paddleHeight * 2);
-var paddleStartY = canvas.width - paddleWidth / 2;
-var paddleY = paddleStartX;
-var paddleX = paddleStartY;
+var paddleStartX = (canvas.width / 2) - (paddleWidth / 2);
+var paddleStartY = canvas.height - (paddleHeight * 2);
+var paddleX = paddleStartX;
+var paddleY = paddleStartY;
 
 var bricksColour = '#3333EE';
 var brickRowCount = 3;
@@ -105,7 +105,7 @@ function drawPaddle() {
 
   if (rightPressed) {
     paddleX += 5;
-    if (paddleX + paddleWidth > canvas.width){
+    if (paddleX + paddleWidth > canvas.width) {
       paddleX = canvas.width - paddleWidth;
     }
   } else if (leftPressed) {
@@ -134,9 +134,11 @@ function keyUpHandler(e) {
 
 function mouseMoveHandler(e) {
   var relativeX = e.clientX - canvas.offsetLeft;
-  if(relativeX > 0 && relativeX < canvas.width) {
+  if (relativeX > 0 && relativeX < (canvas.width - paddleWidth / 2)) {
     paddleX = relativeX - paddleWidth / 2;
   }
+  if (paddleX < 0) paddleX = 0;
+  if ((paddleX + paddleWidth / 2) > canvas.width) paddleX = canvas.width - paddleWidth;
 }
 
 
@@ -159,11 +161,11 @@ function collisionDetection() {
   }
 
   // paddle collision
-  if ((ballY + paddleHeight) > paddleY) dy = -dy;
+  if (ballX > paddleX && ballX < paddleX + paddleWidth && ballY > paddleY && ballY < paddleY + paddleHeight)
+    dy = -dy;
 }
 
 function levelFinished() {
-  clearInterval(game);
   alert('GAME OVER! YOU WIN!');
   document.location.reload();
 }
@@ -183,7 +185,6 @@ function drawLives() {
 function loseLife() {
   lives--;
   if (lives <= 0) {
-    clearInterval(game); // Needed for Chrome to end game
     var confirm = window.confirm('GAME OVER\n\nAgain?');
     if (confirm) {
       document.location.reload();
@@ -208,10 +209,12 @@ function draw() {
   drawLives();
 
   collisionDetection();
+
+  requestAnimationFrame(draw);
 }
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
-var game = setInterval(draw, 10);
+draw();
