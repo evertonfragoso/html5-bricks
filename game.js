@@ -6,17 +6,59 @@ var speed = 2;
 var rightPressed = false;
 var leftPressed = false;
 
-var ballColour = '#0095DD';
+var ballColour = '#EE3333';
 var ballRadius = 10;
 var ballX = canvas.width / 2;
 var ballY = canvas.height - 30;
 var dx = speed;
 var dy = -speed;
 
-var paddleColour = '#0095DD';
+var paddleColour = '#EEEEEE';
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width - paddleWidth) / 2;
+
+var bricksColour = '#3333EE';
+var brickRowCount = 3;
+var brickColumnCount = 5;
+var brickWidth = 75;
+var brickHeight = 20;
+var brickPadding = 10;
+var brickOffsetTop = 30;
+var brickOffsetLeft = 30;
+
+var bricks = [];
+for (var c = 0; c < brickColumnCount; c++) {
+  bricks[c] = [];
+  for (var r = 0; r < brickRowCount; r++) {
+    bricks[c][r] = { x: 0, y: 0 };
+  }
+}
+
+
+function drawBricks() {
+  let brickX = 0;
+  let brickY = 0;
+
+  var drawBrick = function(x, y, w, h) {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.fillStyle = bricksColour;
+    ctx.fill();
+    ctx.closePath();
+  };
+
+  for (var c = 0; c < brickColumnCount; c++) {
+    for (var r = 0; r < brickRowCount; r++) {
+      brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+      brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+
+      bricks[c][r].x = 0;
+      bricks[c][r].y = 0;
+      drawBrick(brickX, brickY, brickWidth, brickHeight);
+    }
+  }
+}
 
 function drawBall() {
   ctx.beginPath();
@@ -88,6 +130,7 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   drawPaddle();
+  drawBricks();
   drawBall();
 }
 
