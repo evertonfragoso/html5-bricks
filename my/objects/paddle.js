@@ -1,21 +1,21 @@
-export default function Paddle() {
-  const p = this;
-  const canvas = window.Game.Canvas;
-  const context = window.Game.Context;
+export default function Paddle () {
+  const p = this
+  const canvas = window.Game.Canvas
+  const context = window.Game.Context
+  const height = 10
+  const width = 75
+  const startX = (canvas.width - width) / 2
+  const startY = canvas.height - (height * 2)
 
-  p.height = 10;
-  p.width = 75;
-  p.startX = (canvas.width - p.width) / 2;
-  p.startY = canvas.height - (p.height * 2);
-  p.x = p.startX;
-  p.y = p.startY;
-  p.colour = '#F3F3F3';
+  p.x = startX
+  p.y = startY
+  p.colour = '#F3F3F3'
 
-  p.draw = function() {
-    context.beginPath();
-    context.rect(p.x, p.y, p.width, p.height);
-    context.fillStyle = p.colour;
-    context.fill();
-    context.closePath();
-  };
+  p.draw = function () {
+    context.beginPath()
+    context.rect(p.x, p.y, width, height)
+    context.fillStyle = p.colour
+    context.fill()
+    context.closePath()
+  }
 }
