@@ -1,6 +1,9 @@
 const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
 
+var score = 0;
+var fontColour = '#33EE33';
+
 var speed = 2;
 
 var rightPressed = false;
@@ -9,13 +12,14 @@ var leftPressed = false;
 var ballColour = '#EE3333';
 var ballRadius = 10;
 var ballX = canvas.width / 2;
-var ballY = canvas.height - 30;
+var ballY = canvas.height - 50;
 var dx = speed;
 var dy = -speed;
 
 var paddleColour = '#EEEEEE';
 var paddleHeight = 10;
 var paddleWidth = 75;
+var paddleY = canvas.height - (paddleHeight * 2);
 var paddleX = (canvas.width - paddleWidth) / 2;
 
 var bricksColour = '#3333EE';
@@ -70,12 +74,12 @@ function drawBall() {
   ctx.fill();
   ctx.closePath();
 
-  if (ballX + dx > canvas.width-ballRadius || ballX + dx < ballRadius) {
+  if ((ballX + dx) > (canvas.width - ballRadius) || (ballX + dx) < ballRadius) {
     dx = -dx;
   }
   if (ballY + dy < ballRadius) {
     dy = -dy;
-  } else if (ballY + dy > canvas.height-ballRadius) {
+  } else if (ballY + dy > canvas.height - ballRadius) {
     if (ballX > paddleX && ballX < paddleX + paddleWidth) {
       dy = -dy;
     } else {
@@ -89,7 +93,7 @@ function drawBall() {
 
 function drawPaddle() {
   ctx.beginPath();
-  ctx.rect(paddleX, canvas.height - (paddleHeight * 2), paddleWidth, paddleHeight);
+  ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
   ctx.fillStyle = paddleColour;
   ctx.fill();
   ctx.closePath();
@@ -125,6 +129,7 @@ function keyUpHandler(e) {
 
 
 function collisionDetection() {
+  // brick collision
   for (var c = 0; c < brickColumnCount; c++) {
     for (var r = 0; r < brickRowCount; r++) {
       var b = bricks[c][r];
@@ -132,10 +137,29 @@ function collisionDetection() {
         if (ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
           dy = -dy;
           b.status = 0;
+          score++;
+          if (score == (brickRowCount * brickColumnCount)) {
+            levelFinished();
+          }
         }
       }
     }
   }
+
+  // paddle collision
+  if ((ballY + paddleHeight) > paddleY) dy = -dy;
+}
+
+function levelFinished() {
+  clearInterval(game);
+  alert('GAME OVER! YOU WIN!');
+  document.location.reload();
+}
+
+function drawScore() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = fontColour;
+  ctx.fillText('Score: ' + score, 8, 20);
 }
 
 function loseLife() {
@@ -148,10 +172,12 @@ function loseLife() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawPaddle();
-  collisionDetection();
   drawBricks();
+  drawPaddle();
   drawBall();
+  drawScore();
+
+  collisionDetection();
 }
 
 document.addEventListener('keydown', keyDownHandler, false);
