@@ -31,7 +31,7 @@ var bricks = [];
 for (var c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
   for (var r = 0; r < brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0 };
+    bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
 
@@ -50,12 +50,15 @@ function drawBricks() {
 
   for (var c = 0; c < brickColumnCount; c++) {
     for (var r = 0; r < brickRowCount; r++) {
-      brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-      brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+      if (bricks[c][r].status == 1) {
+        brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+        brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
 
-      bricks[c][r].x = 0;
-      bricks[c][r].y = 0;
-      drawBrick(brickX, brickY, brickWidth, brickHeight);
+        bricks[c][r].x = brickX;
+        bricks[c][r].y = brickY;
+
+        drawBrick(brickX, brickY, brickWidth, brickHeight);
+      }
     }
   }
 }
@@ -120,16 +123,33 @@ function keyUpHandler(e) {
   }
 }
 
+
+function collisionDetection() {
+  for (var c = 0; c < brickColumnCount; c++) {
+    for (var r = 0; r < brickRowCount; r++) {
+      var b = bricks[c][r];
+      if (b.status == 1) {
+        if (ballX > b.x && ballX < b.x + brickWidth && ballY > b.y && ballY < b.y + brickHeight) {
+          dy = -dy;
+          b.status = 0;
+        }
+      }
+    }
+  }
+}
+
 function loseLife() {
   clearInterval(game); // Needed for Chrome to end game
   var confirm = window.confirm('GAME OVER\n\nAgain?');
   if (confirm) document.location.reload();
 }
 
+
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   drawPaddle();
+  collisionDetection();
   drawBricks();
   drawBall();
 }
