@@ -11,6 +11,11 @@ export default function Ball () {
   b.y = b.startY
   b.colour = '#FF3333'
 
+  function hitTest () {}
+
+  b.launch = function () {}
+  b.move = function () {}
+
   b.draw = function () {
     context.beginPath()
     context.arc(b.x, b.y, radius, 0, Math.PI * 2)

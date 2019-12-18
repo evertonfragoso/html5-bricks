@@ -2,8 +2,8 @@ export default function Brick (x, y, colour) {
   const b = this
   const context = window.Game.Context
 
-  b.height = window.Game.BrickHeight
-  b.width = window.Game.BrickWidth
+  b.height = window.Game.Brick.height
+  b.width = window.Game.Brick.width
   b.y = y
   b.x = x
   b.colour = colour

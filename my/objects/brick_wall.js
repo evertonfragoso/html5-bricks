@@ -12,13 +12,13 @@ const Colours = {
 
 export default function BrickWall (rows, columns) {
   const b = this
-  const brickHeight = window.Game.BrickHeight
-  const brickWidth = window.Game.BrickWidth
+  const brickHeight = window.Game.Brick.height
+  const brickWidth = window.Game.Brick.width
 
   let brickWall = []
   let colour
-  let x = window.Game.BrickXSpacing
-  let y = window.Game.BrickYSpacing
+  let x = window.Game.Brick.XSpacing
+  let y = window.Game.Brick.YSpacing
 
   function Wall () {
     // Rows
