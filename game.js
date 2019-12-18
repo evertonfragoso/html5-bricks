@@ -2,6 +2,7 @@ const canvas = document.querySelector('#game');
 const ctx = canvas.getContext('2d');
 
 var score = 0;
+var lives = 3;
 var fontColour = '#33EE33';
 
 var speed = 2;
@@ -11,16 +12,20 @@ var leftPressed = false;
 
 var ballColour = '#EE3333';
 var ballRadius = 10;
-var ballX = canvas.width / 2;
-var ballY = canvas.height - 50;
+var ballStartX = canvas.width / 2;
+var ballStartY = canvas.height - 50;
+var ballX = ballStartX;
+var ballY = ballStartY;
 var dx = speed;
 var dy = -speed;
 
 var paddleColour = '#EEEEEE';
 var paddleHeight = 10;
 var paddleWidth = 75;
-var paddleY = canvas.height - (paddleHeight * 2);
-var paddleX = canvas.width - paddleWidth / 2;
+var paddleStartX = canvas.height - (paddleHeight * 2);
+var paddleStartY = canvas.width - paddleWidth / 2;
+var paddleY = paddleStartX;
+var paddleX = paddleStartY;
 
 var bricksColour = '#3333EE';
 var brickRowCount = 3;
@@ -169,10 +174,27 @@ function drawScore() {
   ctx.fillText('Score: ' + score, 8, 20);
 }
 
+function drawLives() {
+  ctx.font = '16px Arial';
+  ctx.fillStyle = fontColour;
+  ctx.fillText('Lives: ' + lives, canvas.width - 65, 20);
+}
+
 function loseLife() {
-  clearInterval(game); // Needed for Chrome to end game
-  var confirm = window.confirm('GAME OVER\n\nAgain?');
-  if (confirm) document.location.reload();
+  lives--;
+  if (lives <= 0) {
+    clearInterval(game); // Needed for Chrome to end game
+    var confirm = window.confirm('GAME OVER\n\nAgain?');
+    if (confirm) {
+      document.location.reload();
+    }
+  } else {
+    ballX = ballStartX;
+    ballY = ballStartY;
+    dx = speed;
+    dy = -speed;
+    paddleX = paddleStartX;
+  }
 }
 
 
@@ -183,6 +205,7 @@ function draw() {
   drawPaddle();
   drawBall();
   drawScore();
+  drawLives();
 
   collisionDetection();
 }
