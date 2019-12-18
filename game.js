@@ -20,7 +20,7 @@ var paddleColour = '#EEEEEE';
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleY = canvas.height - (paddleHeight * 2);
-var paddleX = (canvas.width - paddleWidth) / 2;
+var paddleX = canvas.width - paddleWidth / 2;
 
 var bricksColour = '#3333EE';
 var brickRowCount = 3;
@@ -127,6 +127,13 @@ function keyUpHandler(e) {
   }
 }
 
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+  if(relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}
+
 
 function collisionDetection() {
   // brick collision
@@ -182,5 +189,6 @@ function draw() {
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('mousemove', mouseMoveHandler, false);
 
 var game = setInterval(draw, 10);
