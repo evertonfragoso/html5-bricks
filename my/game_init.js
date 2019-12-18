@@ -1,5 +1,9 @@
-export default (function Init() {
+export default function Init() {
   const GAME_CANVAS_SELECTOR = '#game';
 
-  window.Game.gameCanvas = document.querySelector(GAME_CANVAS_SELECTOR);
-});
+  let canvas = document.querySelector(GAME_CANVAS_SELECTOR);
+  let context = canvas.getContext('2d');
+
+  window.Game.Canvas = canvas;
+  window.Game.Context = context;
+}
