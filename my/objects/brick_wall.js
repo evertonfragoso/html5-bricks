@@ -1,19 +1,11 @@
 import Brick from './brick.js'
 
-const Colours = {
-  Red: '#FF0000',
-  Orange: '#FF7F00',
-  Yellow: '#FFFF00',
-  Green: '#00FF00',
-  Blue: '#0000FF',
-  Indigo: '#4B0082',
-  Violet: '#9400D3'
-}
-
 export default function BrickWall (rows, columns) {
   const b = this
-  const brickHeight = window.Game.Brick.height
-  const brickWidth = window.Game.Brick.width
+  const G = window.Game
+  const Colours = G.Colours
+  const brickHeight = G.Brick.height
+  const brickWidth = G.Brick.width
 
   let brickWall = []
   let colour
