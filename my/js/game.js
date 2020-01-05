@@ -12,6 +12,9 @@ import Border from './objects/border.js'
 import BrickWall from './objects/brick_wall.js'
 import Paddle from './objects/paddle.js'
 
+// Game Data
+import GameData from './game_data.js'
+
 let G = window.Game
 G.Colours = Colours
 
@@ -20,39 +23,27 @@ let brickColumns = 5
 let rowHeight = 15
 let columnWidth = 50
 
-let wallMargin = 10
-
-let readyToServeBall = true
+let wallMargin = (G.Canvas.width - (brickColumns * columnWidth)) / brickColumns
 
 G.Brick.height = rowHeight
 G.Brick.width = columnWidth
 
-G.Ball = new Ball()
-G.Border = new Border()
-G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
-G.Paddle = new Paddle()
-
 function serveBall () {
-  if (G.Ball.lives < 1) {
-    G.Ball.lives = 3
-    G.Ball.score = 0
-    G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
+  if (G.Data.Lives.get() < 1) {
+    startGame()
   }
 
-  readyToServeBall = false
+  G.Ball.readyToServe = false
   let ballX = G.Paddle.x + G.Paddle.width / 2
   let ballY = G.Paddle.y - G.Ball.height
-  G.Ball.Launch(ballX, ballY, -3, -3)
-}
 
-function drawLives () {
-  let livesElem = document.querySelector('#lives span')
-  livesElem.innerHTML = G.Ball.lives
-}
+  function randomVelocity () {
+    let min = -5
+    let max = 5
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
 
-function drawScore () {
-  let scoreElem = document.querySelector('#score span')
-  scoreElem.innerHTML = G.Ball.score
+  G.Ball.Launch(ballX, ballY, randomVelocity, randomVelocity)
 }
 
 function drawObjects () {
@@ -63,10 +54,21 @@ function drawObjects () {
   G.BrickWall.draw()
   G.Paddle.draw()
 
-  drawLives()
-  drawScore()
+  G.Data.Lives.draw()
+  G.Data.Score.draw()
 
   requestAnimationFrame(drawObjects)
 }
 
-drawObjects()
+// Game Start
+function startGame () {
+  G.Ball = new Ball()
+  G.Border = new Border()
+  G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
+  G.Paddle = new Paddle()
+  G.Data = new GameData()
+
+  drawObjects()
+}
+
+startGame()

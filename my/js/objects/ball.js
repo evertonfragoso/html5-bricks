@@ -13,12 +13,11 @@ export default function Ball () {
   b.width
   b.x = startX
   b.y = startY
-  b.XVelocity = 0
-  b.YVelocity = 0
-  b.lives = 3
-  b.score = 0
+  b.XVelocity
+  b.YVelocity
   b.colour = Colours.Red
   b.status = true
+  b.readyToServe = true
 
   b.hitTest = function (obj) {
     return !(obj.left > b.right || obj.right < b.left ||
