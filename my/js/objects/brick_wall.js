@@ -9,8 +9,8 @@ export default function BrickWall (x, y, rows, columns) {
 
   let brickWall = []
   let colour
-  let Yspacing = brickHeight / 2
-  let Xspacing = brickWidth / 2
+  let Yspacing = 5
+  let Xspacing = 10
 
   function Wall () {
     // Rows

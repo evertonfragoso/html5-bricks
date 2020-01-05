@@ -16,11 +16,11 @@ let G = window.Game
 G.Colours = Colours
 
 let brickRows = 7
-let brickColumns = 8
-let rowHeight = 16
+let brickColumns = 5
+let rowHeight = 15
 let columnWidth = 50
 
-let wallMargin = (G.Canvas.width - ((brickColumns * columnWidth) + ((columnWidth / 2) * (brickColumns - 1)))) / 2
+let wallMargin = 10
 
 let readyToServeBall = true
 
@@ -46,12 +46,12 @@ function serveBall () {
 }
 
 function drawLives () {
-  let livesElem = document.querySelector('#lives')
+  let livesElem = document.querySelector('#lives span')
   livesElem.innerHTML = G.Ball.lives
 }
 
 function drawScore () {
-  let scoreElem = document.querySelector('#score')
+  let scoreElem = document.querySelector('#score span')
   scoreElem.innerHTML = G.Ball.score
 }
 

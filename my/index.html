@@ -3,18 +3,22 @@
   <head>
     <meta charset="utf-8">
     <title>My Bricks Game</title>
-    <style>
-      * { margin: 0; padding: 0; }
-      canvas { background: #000; display: block; margin: 1rem auto; }
-      canvas:hover { cursor: none; }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <canvas id="game" width="600" height="750"></canvas>
+    <main>
+      <canvas id="game" width="350" height="550">
+        Your browser does not support canvas element.
+      </canvas>
 
-    <p id="lives"></p>
-    <p id="score"></p>
+      <p id="lives">
+        Lives: <span></span>
+      </p>
+      <p id="score">
+        Score: <span></span>
+      </p>
+    </main>
 
-    <script src="game.js" type="module"></script>
+    <script src="js/game.js" type="module"></script>
   </body>
 </html>
