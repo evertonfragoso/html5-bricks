@@ -3,12 +3,21 @@
   padding: 0;
 }
 
+pre {
+  background-color: #eee;
+  grid-area: debug;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: .5rem;
+}
+
 main {
   display: grid;
   grid-gap: 1rem;
   grid-template-areas:
     'game game'
-    'score lives';
+    'score lives'
+    'debug debug';
   margin: 1rem auto;
   width: 350px;
 }

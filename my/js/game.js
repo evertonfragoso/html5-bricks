@@ -15,6 +15,11 @@ import Paddle from './objects/paddle.js'
 // Game Data
 import GameData from './game_data.js'
 
+let debugElem = document.querySelector('#debug')
+function debug (msg) {
+  debugElem.innerText += (msg + '\n')
+}
+
 let G = window.Game
 G.Colours = Colours
 
@@ -28,47 +33,64 @@ let wallMargin = (G.Canvas.width - (brickColumns * columnWidth)) / brickColumns
 G.Brick.height = rowHeight
 G.Brick.width = columnWidth
 
-function serveBall () {
-  if (G.Data.Lives.get() < 1) {
-    startGame()
-  }
-
-  G.Ball.readyToServe = false
-  let ballX = G.Paddle.x + G.Paddle.width / 2
-  let ballY = G.Paddle.y - G.Ball.height
-
-  function randomVelocity () {
-    let min = -5
-    let max = 5
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }
-
-  G.Ball.Launch(ballX, ballY, randomVelocity, randomVelocity)
-}
-
-function drawObjects () {
-  G.Context.clearRect(0, 0, G.Canvas.width, G.Canvas.height)
-
-  G.Ball.draw()
-  G.Border.draw()
-  G.BrickWall.draw()
-  G.Paddle.draw()
-
-  G.Data.Lives.draw()
-  G.Data.Score.draw()
-
-  requestAnimationFrame(drawObjects)
-}
-
-// Game Start
-function startGame () {
+function startObjects () {
   G.Ball = new Ball()
   G.Border = new Border()
   G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
   G.Paddle = new Paddle()
   G.Data = new GameData()
+}
 
+function drawMessage () {
+  let message
+
+  if (G.Data.Lives.get() > 0) {
+    message = 'Press <Space> or Click/Tap to Start'
+  } else {
+    message = 'Game Over'
+  }
+
+  G.Context.font = '20px serif'
+  G.Context.fillStyle = G.Colours.White
+
+  let textMeasure = G.Context.measureText(message)
+  let posX = Math.floor((G.Canvas.width / 2) - (textMeasure.width / 2))
+  let posY = G.Canvas.height / 2
+
+  G.Context.fillText(message, posX, posY)
+}
+
+function drawObjects () {
+  G.Context.clearRect(0, 0, G.Canvas.width, G.Canvas.height)
+
+  G.Border.draw()
+  G.BrickWall.draw()
+  G.Paddle.draw()
+
+  if (G.Ball.status) {
+    let inPlay = G.Ball.move(G.BrickWall, G.Paddle)
+    if (inPlay) {
+      G.Ball.draw()
+    } else {
+      G.Data.Lives.lose()
+      G.Ball.readyToServe = true
+    }
+  }
+
+  G.Data.Lives.draw()
+  G.Data.Score.draw()
+
+  if (G.Ball.readyToServe) {
+    drawMessage()
+  }
+
+  requestAnimationFrame(drawObjects)
+}
+
+// Game Start
+G.Start = function () {
+  startObjects()
   drawObjects()
 }
 
-startGame()
+document.addEventListener('DOMContentLoaded', G.Start)

@@ -28,6 +28,8 @@ export default (function () {
     } else if (e.keyCode == KEY_LEFT_ARROW || e.keyCode == KEY_A) {
       // left arrow key pressed
       game.Paddle.moveLeft()
+    } else if (e.keyCode == KEY_SPACE && game.Ball.readyToServe) {
+      serveBall()
     }
   }
 
@@ -39,9 +41,20 @@ export default (function () {
     }
   }
 
+  function mouseClickHandler (e) {
+    e.preventDefault()
+    if (game.Ball.readyToServe) {
+      serveBall()
+    }
+  }
+
   function touchStartHandler (e) {
     if (e.targetTouches.length > 1) {
       e.preventDefault()
+    }
+
+    if (game.Ball.readyToServe) {
+      serveBall()
     }
 
     for (var i = 0; i < e.targetTouches.length; i++) {
@@ -65,11 +78,22 @@ export default (function () {
     }
   }
 
+  function serveBall () {
+    if (game.Data.Lives.get() < 1) {
+      game.Data.reset()
+      game.Start()
+    }
+
+    game.Ball.readyToServe = false
+    game.Ball.launch()
+  }
+
   // Keyboard listeners
   document.addEventListener('keydown', keyDownHandler, false)
   // document.addEventListener('keyup', keyUpHandler, false)
 
   // Mouse listeners
+  canvas.addEventListener('click', mouseClickHandler, false)
   canvas.addEventListener('mousemove', mouseMoveHandler, false)
 
   // Touch listeners
