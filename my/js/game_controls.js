@@ -2,6 +2,17 @@ export default (function () {
   const game = window.Game
   const canvas = game.Canvas
 
+  const KEY_RETURN = 13
+  const KEY_SHIFT = 16
+  const KEY_ESCAPE = 27
+  const KEY_SPACE = 32
+  const KEY_LEFT_ARROW = 37
+  const KEY_UP_ARROW = 38
+  const KEY_RIGHT_ARROW = 39
+  const KEY_DOWN_ARROW = 40
+  const KEY_A = 65
+  const KEY_D = 68
+
   // function keyUpHandler (e) {
   //   if (e.keyCode == 39) {
   //     window.Game.Paddle.moveRight()
@@ -11,10 +22,10 @@ export default (function () {
   // }
 
   function keyDownHandler (e) {
-    if (e.keyCode == 39) {
+    if (e.keyCode == KEY_RIGHT_ARROW || e.keyCode == KEY_D) {
       // right arrow key pressed
       game.Paddle.moveRight()
-    } else if (e.keyCode == 37) {
+    } else if (e.keyCode == KEY_LEFT_ARROW || e.keyCode == KEY_A) {
       // left arrow key pressed
       game.Paddle.moveLeft()
     }
