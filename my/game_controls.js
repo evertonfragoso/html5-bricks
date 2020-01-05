@@ -1,5 +1,4 @@
 export default (function () {
-  const gc = this
   const game = window.Game
   const canvas = game.Canvas
 
@@ -13,8 +12,10 @@ export default (function () {
 
   function keyDownHandler (e) {
     if (e.keyCode == 39) {
+      // right arrow key pressed
       game.Paddle.moveRight()
     } else if (e.keyCode == 37) {
+      // left arrow key pressed
       game.Paddle.moveLeft()
     }
   }
@@ -27,7 +28,40 @@ export default (function () {
     }
   }
 
+  function touchStartHandler (e) {
+    if (e.targetTouches.length > 1) {
+      e.preventDefault()
+    }
+
+    for (var i = 0; i < e.targetTouches.length; i++) {
+      processMove(e.targetTouches[i])
+    }
+  }
+
+  function touchMoveHandler (e) {
+    e.preventDefault()
+
+    for (var i = 0; i < e.targetTouches.length; i++) {
+      processMove(e.targetTouches[i])
+    }
+  }
+
+  function processMove (target) {
+    var posX = target.clientX - (game.Paddle.width / 2)
+    var relativeX = posX - canvas.offsetLeft
+    if (relativeX >= 0 || relativeX < canvas.width) {
+      game.Paddle.moveTo(relativeX)
+    }
+  }
+
+  // Keyboard listeners
   document.addEventListener('keydown', keyDownHandler, false)
   // document.addEventListener('keyup', keyUpHandler, false)
-  document.addEventListener('mousemove', mouseMoveHandler, false)
+
+  // Mouse listeners
+  canvas.addEventListener('mousemove', mouseMoveHandler, false)
+
+  // Touch listeners
+  canvas.addEventListener('touchstart', touchStartHandler, false)
+  canvas.addEventListener('touchmove', touchMoveHandler, false)
 })()
