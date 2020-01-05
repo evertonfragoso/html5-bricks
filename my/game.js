@@ -13,21 +13,47 @@ import BrickWall from './objects/brick_wall.js'
 import Paddle from './objects/paddle.js'
 
 let G = window.Game
-let brickRows = 7
-let brickColumns = 8
-
 G.Colours = Colours
 
-G.Brick.height = G.Canvas.height * 0.02
-// TODO: Make this width properly
-G.Brick.width = G.Canvas.width / (brickColumns * 1.225)
-G.Brick.XSpacing = G.Brick.width * 0.2
-G.Brick.YSpacing = G.Brick.height * 0.5
+let brickRows = 7
+let brickColumns = 8
+let rowHeight = 16
+let columnWidth = 50
+
+let wallMargin = (G.Canvas.width - ((brickColumns * columnWidth) + ((columnWidth / 2) * (brickColumns - 1)))) / 2
+
+let readyToServeBall = true
+
+G.Brick.height = rowHeight
+G.Brick.width = columnWidth
 
 G.Ball = new Ball()
 G.Border = new Border()
-G.BrickWall = new BrickWall(brickRows, brickColumns)
+G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
 G.Paddle = new Paddle()
+
+function serveBall () {
+  if (G.Ball.lives < 1) {
+    G.Ball.lives = 3
+    G.Ball.score = 0
+    G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
+  }
+
+  readyToServeBall = false
+  let ballX = G.Paddle.x + G.Paddle.width / 2
+  let ballY = G.Paddle.y - G.Ball.height
+  G.Ball.Launch(ballX, ballY, -3, -3)
+}
+
+function drawLives () {
+  let livesElem = document.querySelector('#lives')
+  livesElem.innerHTML = G.Ball.lives
+}
+
+function drawScore () {
+  let scoreElem = document.querySelector('#score')
+  scoreElem.innerHTML = G.Ball.score
+}
 
 function drawObjects () {
   G.Context.clearRect(0, 0, G.Canvas.width, G.Canvas.height)
@@ -36,7 +62,9 @@ function drawObjects () {
   G.Border.draw()
   G.BrickWall.draw()
   G.Paddle.draw()
-debugger
+
+  drawLives()
+  drawScore()
 
   requestAnimationFrame(drawObjects)
 }

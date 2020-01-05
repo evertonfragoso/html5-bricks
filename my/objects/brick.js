@@ -1,9 +1,11 @@
 export default function Brick (x, y, colour) {
   const b = this
-  const context = window.Game.Context
+  const G = window.Game
+  const Colours = G.Colours
+  const context = G.Context
 
-  b.height = window.Game.Brick.height
-  b.width = window.Game.Brick.width
+  b.height = G.Brick.height
+  b.width = G.Brick.width
   b.y = y
   b.x = x
   b.colour = colour
@@ -14,7 +16,7 @@ export default function Brick (x, y, colour) {
       context.beginPath()
       context.rect(b.x, b.y, b.width, b.height)
       context.fillStyle = b.colour
-      context.strokeStyle = '#FFFFFF'
+      context.strokeStyle = Colours.White
       context.fill()
       context.stroke()
       context.closePath()

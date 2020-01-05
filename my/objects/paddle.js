@@ -1,7 +1,9 @@
 export default function Paddle () {
   const p = this
-  const canvas = window.Game.Canvas
-  const context = window.Game.Context
+  const G = window.Game
+  const Colours = G.Colours
+  const canvas = G.Canvas
+  const context = G.Context
   const height = 10
   const width = 75
   const startX = (canvas.width - width) / 2
@@ -9,7 +11,7 @@ export default function Paddle () {
 
   p.x = startX
   p.y = startY
-  p.colour = '#F3F3F3'
+  p.colour = Colours.White
 
   p.height = height
   p.width = width

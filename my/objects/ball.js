@@ -15,12 +15,14 @@ export default function Ball () {
   b.y = startY
   b.XVelocity = 0
   b.YVelocity = 0
+  b.lives = 3
+  b.score = 0
   b.colour = Colours.Red
   b.status = true
 
-  b.hitTest = function (obj1, obj2) {
-    return !(obj2.left > obj1.right  || obj2.right  < obj1.left ||
-             obj2.top  > obj1.bottom || obj2.bottom < obj1.top)
+  b.hitTest = function (obj) {
+    return !(obj.left > b.right || obj.right < b.left ||
+             obj.top > b.bottom || obj.bottom < b.top)
   }
 
   b.launch = function (x, y, xVelocity, yVelocity) {
@@ -40,29 +42,28 @@ export default function Ball () {
     b.y += b.YVelocity
 
     // check for wall hits
-    if (b.X < 1) {
-      b.X = 1;
-      b.XVelocity *= -1;
+    if (b.x < 1) {
+      b.x = 1
+      b.XVelocity *= -1
     }
-    if (b.X > canvas.width - b.width + 5) {
-      b.X = canvas.width - b.width + 5;
-      b.XVelocity *= -1;
+    if (b.x > canvas.width - b.width + 5) {
+      b.x = canvas.width - b.width + 5
+      b.XVelocity *= -1
     }
     if (b.Y < 1) {
-      b.Y = 1;
-      b.YVelocity *= -1;
+      b.Y = 1
+      b.YVelocity *= -1
     }
     if (b.Y + b.height > canvas.height) {
-      b.Visible = false;
-      b.Y = 0;
-      return false;
+      b.Visible = false
+      b.Y = 0
+      return false
     }
 
     // check for paddle hit
-    context.beginPath()
-    let paddleRect = context.rect(paddle.x, paddle.y, paddle.width, paddle.height)
-    let ballRect = context.rect(b.x, b.y, b.width, b.height)
-    context.closePath()
+    if (b.hitTest(paddle)) {
+      // TODO
+    }
   }
 
   b.draw = function () {
