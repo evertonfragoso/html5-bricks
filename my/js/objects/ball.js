@@ -21,8 +21,10 @@ export default function Ball () {
   b.readyToServe = true
 
   b.hitTest = function (obj) {
-    return (b.x > obj.x && b.x < obj.x + obj.width &&
-            b.y > obj.y && b.y < obj.y + obj.height)
+    var x = b.x + radius
+    var y = b.y + radius
+    return (x > obj.x && x < obj.x + obj.width &&
+            y > obj.y && y < obj.y + obj.height)
   }
 
   b.launch = function () {
@@ -72,6 +74,7 @@ export default function Ball () {
     }
 
     // check for paddle hit
+    // divide it into segments that will determine the angle of the bounce
     if (b.hitTest(paddle)) {
       let offset = Math.round((paddle.width - (paddle.x + paddle.width - b.x + b.width / 2)) / 5)
 

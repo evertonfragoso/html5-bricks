@@ -61,12 +61,11 @@ function drawObjects () {
   G.Border.draw()
   G.BrickWall.draw()
   G.Paddle.draw()
-  G.Ball.draw()
 
   if (G.Ball.status) {
     let inPlay = G.Ball.move(G.BrickWall)
     if (inPlay) {
-      //
+      G.Ball.draw()
     } else {
       G.Data.Lives.lose()
       G.Ball.readyToServe = true

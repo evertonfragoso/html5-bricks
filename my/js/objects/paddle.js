@@ -20,13 +20,13 @@ export default function Paddle () {
 
   p.moveLeft = function () {
     p.x -= (canvas.width * 0.05)
-    if (p.x < 1) p.x = 1
+    if (p.x < margin) p.x = margin + 1
   }
 
   p.moveRight = function () {
     p.x += (canvas.width * 0.05)
-    if ((p.x + width) > canvas.width) {
-      p.x = canvas.width - width
+    if ((p.x + width) > canvas.width - margin) {
+      p.x = canvas.width - width - margin
     }
   }
 
