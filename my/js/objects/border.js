@@ -7,6 +7,8 @@ export default function Border () {
 
   let margin = 4
 
+  b.getMargin = function () { return margin }
+
   b.draw = function () {
     context.beginPath()
     context.lineWidth = 2

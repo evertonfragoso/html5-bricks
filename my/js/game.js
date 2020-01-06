@@ -15,16 +15,11 @@ import Paddle from './objects/paddle.js'
 // Game Data
 import GameData from './game_data.js'
 
-let debugElem = document.querySelector('#debug')
-function debug (msg) {
-  debugElem.innerText += (msg + '\n')
-}
-
 let G = window.Game
 G.Colours = Colours
 
 let brickRows = 7
-let brickColumns = 5
+let brickColumns = 6
 let rowHeight = 15
 let columnWidth = 50
 
@@ -50,7 +45,7 @@ function drawMessage () {
     message = 'Game Over'
   }
 
-  G.Context.font = '20px serif'
+  G.Context.font = '1rem Verdana, -apple-system, sans-serif'
   G.Context.fillStyle = G.Colours.White
 
   let textMeasure = G.Context.measureText(message)
@@ -66,11 +61,12 @@ function drawObjects () {
   G.Border.draw()
   G.BrickWall.draw()
   G.Paddle.draw()
+  G.Ball.draw()
 
   if (G.Ball.status) {
-    let inPlay = G.Ball.move(G.BrickWall, G.Paddle)
+    let inPlay = G.Ball.move(G.BrickWall)
     if (inPlay) {
-      G.Ball.draw()
+      //
     } else {
       G.Data.Lives.lose()
       G.Ball.readyToServe = true

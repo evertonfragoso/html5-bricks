@@ -8,28 +8,29 @@ export default function Ball () {
   const startY = canvas.height - 50
 
   let radius = 10
+  let speed = 5
 
   b.height = radius * 2
   b.width = radius * 2
   b.x = startX
   b.y = startY
-  b.XVelocity
-  b.YVelocity
+  b.XVelocity = 0
+  b.YVelocity = 0
   b.colour = Colours.Red
   b.status = false
   b.readyToServe = true
 
   b.hitTest = function (obj) {
-    return !(obj.x > (b.x + b.width) || (obj.x + obj.width) < b.x ||
-             obj.y > (b.y - b.height) || (obj.y - obj.height) < b.y)
+    return (b.x > obj.x && b.x < obj.x + obj.width &&
+            b.y > obj.y && b.y < obj.y + obj.height)
   }
 
   b.launch = function () {
     if (b.status) return
 
     function randomVelocity () {
-      let min = -5
-      let max = 5
+      let min = speed * -1
+      let max = speed
       return Math.floor(Math.random() * (max - min + 1)) + min
     }
 
@@ -37,37 +38,41 @@ export default function Ball () {
     b.x = startX
     b.y = startY
     b.XVelocity = randomVelocity()
-    b.YVelocity = -5
+    b.YVelocity = speed * -1
   }
 
-  b.move = function (brickWall, paddle) {
+  b.move = function (brickWall) {
     if (b.status === false) return
+
+    let paddle = G.Paddle
 
     b.x += b.XVelocity
     b.y += b.YVelocity
 
     // check for wall hits
-    if (b.x < 1) {
-      b.x = 1
+    // left wall
+    if (b.x < G.Border.getMargin() + radius) {
+      b.x = G.Border.getMargin() + radius
       b.XVelocity *= -1
     }
-    if (b.x > canvas.width - b.width + 5) {
-      b.x = canvas.width - b.width + 5
+    // right wall
+    if (b.x > canvas.width - b.width + speed + G.Border.getMargin()) {
+      b.x = canvas.width - b.width + speed
       b.XVelocity *= -1
     }
-    if (b.y < 1) {
-      b.y = 1
+    // top wall
+    if (b.y < G.Border.getMargin() + radius) {
+      b.y = G.Border.getMargin() + radius
       b.YVelocity *= -1
     }
-    if (b.y + b.height > canvas.height) {
+    // bottom pit
+    if (b.y - b.height > canvas.height) {
       b.status = false
-      b.y = 0
       return false
     }
 
     // check for paddle hit
     if (b.hitTest(paddle)) {
-      debugger
       let offset = Math.round((paddle.width - (paddle.x + paddle.width - b.x + b.width / 2)) / 5)
 
       if (offset < 0) offset = 0
@@ -101,12 +106,10 @@ export default function Ball () {
   }
 
   b.draw = function () {
-    if (b.status) {
-      context.beginPath()
-      context.arc(b.x, b.y, radius, 0, Math.PI * 2)
-      context.fillStyle = b.colour
-      context.fill()
-      context.closePath()
-    }
+    context.beginPath()
+    context.arc(b.x, b.y, radius, 0, Math.PI * 2)
+    context.fillStyle = b.colour
+    context.fill()
+    context.closePath()
   }
 }

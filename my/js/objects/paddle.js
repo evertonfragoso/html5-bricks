@@ -9,6 +9,8 @@ export default function Paddle () {
   const startX = (canvas.width - width) / 2
   const startY = canvas.height - (height * 2)
 
+  let margin = G.Border.getMargin()
+
   p.x = startX
   p.y = startY
   p.colour = Colours.White
@@ -29,10 +31,10 @@ export default function Paddle () {
   }
 
   p.moveTo = function (posX) {
-    if (posX >= 0) {
-      if (posX < canvas.width - width) p.x = posX
-      else p.x = canvas.width - width
-    } else if (posX < 0) p.x = 0
+    if (posX >= margin) {
+      if (posX < canvas.width - width - margin) p.x = posX
+      else p.x = canvas.width - width - margin
+    } else if (posX < margin) p.x = margin + 1
   }
 
   p.draw = function () {
