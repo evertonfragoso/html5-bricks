@@ -14,37 +14,34 @@ import Paddle from './objects/paddle.js'
 
 // Game Data
 import GameData from './game_data.js'
+import Levels from './game_levels.js'
 
 let G = window.Game
 G.Colours = Colours
+G.Data = new GameData()
 
-let brickRows = 7
-let brickColumns = 6
-let rowHeight = 15
-let columnWidth = 50
+let brickRows
+let brickColumns
+let rowHeight
+let columnWidth
+let wallMargin
 
-let wallMargin = (G.Canvas.width - (brickColumns * columnWidth)) / brickColumns
-
-G.Brick.height = rowHeight
-G.Brick.width = columnWidth
+function startLevel () {
+  brickRows = Levels[G.Data.Level.get()].brickRows
+  brickColumns = Levels[G.Data.Level.get()].brickColumns
+  rowHeight = Levels[G.Data.Level.get()].rowHeight
+  columnWidth = Levels[G.Data.Level.get()].columnWidth
+  wallMargin = (G.Canvas.width - (brickColumns * columnWidth)) / brickColumns
+}
 
 function startObjects () {
   G.Ball = new Ball()
   G.Border = new Border()
-  G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
   G.Paddle = new Paddle()
-  G.Data = new GameData()
+  newWall()
 }
 
-function drawMessage () {
-  let message
-
-  if (G.Data.Lives.get() > 0) {
-    message = 'Press <Space> or Click/Tap to Start'
-  } else {
-    message = 'Game Over'
-  }
-
+function drawMessage (message) {
   G.Context.font = '1rem Verdana, -apple-system, sans-serif'
   G.Context.fillStyle = G.Colours.White
 
@@ -55,40 +52,60 @@ function drawMessage () {
   G.Context.fillText(message, posX, posY)
 }
 
+function newWall() {
+  G.BrickWall =  new BrickWall(wallMargin, rowHeight, columnWidth, rowHeight, brickRows, brickColumns)
+}
+
+function gameOver () {
+  drawMessage('Game Over')
+  G.Data.reset()
+  newWall()
+}
+
 function drawObjects () {
   G.Context.clearRect(0, 0, G.Canvas.width, G.Canvas.height)
 
-  G.Ball.draw()
   G.Border.draw()
-
-  if (G.BrickWall.bricksToClear() == 0) {
-    G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
-    G.Ball.readyToServe = true
-  }
-
   G.BrickWall.draw()
   G.Paddle.draw()
 
+  if (G.BrickWall.bricksToClear() == 0) {
+    G.Data.Level.increase()
+    startLevel()
+    G.Ball.readyToServe = true
+    newWall()
+  }
+
+  if (G.Ball.readyToServe) {
+    G.Ball.status = false
+
+    if (G.Data.Lives.get() > 0) {
+      drawMessage('Press <Space> or Click/Tap to Launch')
+    } else {
+      gameOver()
+    }
+  }
+
   if (G.Ball.status) {
     let inPlay = G.Ball.move()
-    if (!inPlay) {
+    if (inPlay) {
+      G.Ball.draw()
+    } else {
       G.Data.Lives.lose()
       G.Ball.readyToServe = true
     }
   }
 
   G.Data.Lives.draw()
+  G.Data.Level.draw()
   G.Data.Score.draw()
-
-  if (G.Ball.readyToServe) {
-    drawMessage()
-  }
 
   requestAnimationFrame(drawObjects)
 }
 
 // Game Start
 G.Start = function () {
+  startLevel()
   startObjects()
   drawObjects()
 }

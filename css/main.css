@@ -18,9 +18,9 @@ main {
   display: grid;
   grid-gap: 1rem;
   grid-template-areas:
-    'game game'
-    'score lives'
-    'debug debug';
+    'game game game'
+    'score level lives'
+    'prevscore prevscore prevscore';
   margin: 0 auto;
   width: 360px;
 }
@@ -29,9 +29,19 @@ main #lives {
   grid-area: score;
 }
 
+main #level {
+  grid-area: level;
+  text-align: center;
+}
+
 main #score {
   grid-area: lives;
   text-align: right;
+}
+
+main #prevscore {
+  grid-area: prevscore;
+  text-align: center;
 }
 
 main #game {

@@ -7,3 +7,4 @@ export default (function () {
   window.Game.Canvas = canvas
   window.Game.Context = context
 })()
+

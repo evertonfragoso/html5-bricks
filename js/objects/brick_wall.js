@@ -1,19 +1,17 @@
 import Brick from './brick.js'
 
-export default function BrickWall (x, y, rows, columns) {
+export default function BrickWall (x, y, brickWidth, brickHeight, rows, columns) {
   const b = this
   const G = window.Game
   const canvas = G.Canvas
   const Colours = G.Colours
-  const brickHeight = G.Brick.height
-  const brickWidth = G.Brick.width
 
   let brickWall = []
   let totalBricks = rows * columns
   let bricksToClear = totalBricks
   let colour
   let YSpacing = 5
-  let XSpacing = ((canvas.width - x) - (columns * G.Brick.width)) / columns
+  let XSpacing = ((canvas.width - x) - (columns * brickWidth)) / columns
 
   function Wall () {
     // Rows
@@ -36,7 +34,7 @@ export default function BrickWall (x, y, rows, columns) {
       for (let c = 0; c < columns; c++) {
         let brickX = (x + c * brickWidth)
         if (c > 0 && c < columns) brickX += XSpacing * c
-        brickWall[r][c] = new Brick(brickX, brickY, colour)
+        brickWall[r][c] = new Brick(brickX, brickY, brickWidth, brickHeight, colour)
       }
     }
   }

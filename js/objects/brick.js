@@ -1,11 +1,11 @@
-export default function Brick (x, y, colour) {
+export default function Brick (x, y, width, height, colour) {
   const b = this
   const G = window.Game
   const Colours = G.Colours
   const context = G.Context
 
-  b.height = G.Brick.height
-  b.width = G.Brick.width
+  b.height = height
+  b.width = width
   b.y = y
   b.x = x
   b.colour = colour

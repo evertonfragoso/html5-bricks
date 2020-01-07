@@ -125,10 +125,12 @@ export default function Ball () {
   }
 
   b.draw = function () {
-    context.beginPath()
-    context.arc(b.x, b.y, radius, 0, Math.PI * 2)
-    context.fillStyle = b.colour
-    context.fill()
-    context.closePath()
+    if (b.status) {
+      context.beginPath()
+      context.arc(b.x, b.y, radius, 0, Math.PI * 2)
+      context.fillStyle = b.colour
+      context.fill()
+      context.closePath()
+    }
   }
 }
