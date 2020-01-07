@@ -53,13 +53,14 @@ function drawMessage (message) {
 }
 
 function newWall() {
-  G.BrickWall =  new BrickWall(wallMargin, rowHeight, columnWidth, rowHeight, brickRows, brickColumns)
+  G.BrickWall = new BrickWall(wallMargin, rowHeight, columnWidth, rowHeight, brickRows, brickColumns)
 }
 
 function gameOver () {
   drawMessage('Game Over')
   G.Data.reset()
-  newWall()
+  startLevel()
+  startObjects()
 }
 
 function drawObjects () {
