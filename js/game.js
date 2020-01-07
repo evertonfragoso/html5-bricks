@@ -58,15 +58,14 @@ function drawMessage () {
 function drawObjects () {
   G.Context.clearRect(0, 0, G.Canvas.width, G.Canvas.height)
 
+  G.Ball.draw()
   G.Border.draw()
   G.BrickWall.draw()
   G.Paddle.draw()
 
   if (G.Ball.status) {
-    let inPlay = G.Ball.move(G.BrickWall)
-    if (inPlay) {
-      G.Ball.draw()
-    } else {
+    let inPlay = G.Ball.move()
+    if (!inPlay) {
       G.Data.Lives.lose()
       G.Ball.readyToServe = true
     }

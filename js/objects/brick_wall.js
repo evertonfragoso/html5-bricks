@@ -39,8 +39,14 @@ export default function BrickWall (x, y, rows, columns) {
     }
   }
 
+  b.rows = function () { return rows }
+  b.columns = function () { return columns }
+  b.wall = function () { return brickWall }
+  b.hitBrick = function (row, col) { brickWall[row][col].status = false }
+
   b.draw = function () {
-    Wall()
+    if (brickWall.length == 0) Wall()
+
     for (let r in brickWall) {
       for (let c in brickWall[r]) {
         brickWall[r][c].draw()

@@ -43,10 +43,11 @@ export default function Ball () {
     b.YVelocity = speed * -1
   }
 
-  b.move = function (brickWall) {
+  b.move = function () {
     if (b.status === false) return
 
     let paddle = G.Paddle
+    let wall = G.BrickWall
 
     b.x += b.XVelocity
     b.y += b.YVelocity
@@ -101,9 +102,24 @@ export default function Ball () {
       return true
     }
 
-    // let hitBrick = false
+    let hitBrick = false
 
-    // for (i = 0; i < )
+    for (let r = 0; r < wall.rows(); r++) {
+      if (!hitBrick) {
+        for (let c = 0; c < wall.columns(); c++) {
+          let brick = wall.wall()[r][c]
+          if (brick.status) {
+            if (b.hitTest(brick)) {
+              wall.hitBrick(r, c)
+              G.Data.Score.add(7 - r)
+              b.YVelocity *= -1
+              hitBrick = true
+              break
+            }
+          }
+        }
+      }
+    }
 
     return true
   }
