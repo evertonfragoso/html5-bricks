@@ -20,6 +20,8 @@ export default function Ball () {
   b.status = false
   b.readyToServe = true
 
+  b.setSpeed = function (newSpeed) { speed = newSpeed }
+
   b.hitTest = function (obj) {
     var x = b.x + radius
     var y = b.y + radius
@@ -30,16 +32,13 @@ export default function Ball () {
   b.launch = function () {
     if (b.status) return
 
-    function randomVelocity () {
-      let min = speed * -1
-      let max = speed
-      return Math.floor(Math.random() * (max - min + 1)) + min
-    }
+    var v = [-1, 1]
+    var rand = v[Math.floor(Math.random() * v.length)]
 
     b.status = true
     b.x = startX
     b.y = startY
-    b.XVelocity = randomVelocity()
+    b.XVelocity = speed * rand
     b.YVelocity = speed * -1
   }
 
@@ -47,7 +46,7 @@ export default function Ball () {
     if (b.status === false) return
 
     let paddle = G.Paddle
-    let wall = G.BrickWall
+    let brickWall = G.BrickWall
 
     b.x += b.XVelocity
     b.y += b.YVelocity
@@ -104,14 +103,15 @@ export default function Ball () {
 
     let hitBrick = false
 
-    for (let r = 0; r < wall.rows(); r++) {
+    for (let r = 0; r < brickWall.rows(); r++) {
       if (!hitBrick) {
-        for (let c = 0; c < wall.columns(); c++) {
-          let brick = wall.wall()[r][c]
+        for (let c = 0; c < brickWall.columns(); c++) {
+          let wall = brickWall.wall()
+          let brick = wall[r][c]
           if (brick.status) {
             if (b.hitTest(brick)) {
-              wall.hitBrick(r, c)
-              G.Data.Score.add(7 - r)
+              brickWall.hitBrick(r, c)
+              G.Data.Score.add(brickWall.rows() - r)
               b.YVelocity *= -1
               hitBrick = true
               break

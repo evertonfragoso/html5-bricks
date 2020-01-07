@@ -9,6 +9,8 @@ export default function BrickWall (x, y, rows, columns) {
   const brickWidth = G.Brick.width
 
   let brickWall = []
+  let totalBricks = rows * columns
+  let bricksToClear = totalBricks
   let colour
   let YSpacing = 5
   let XSpacing = ((canvas.width - x) - (columns * G.Brick.width)) / columns
@@ -42,10 +44,14 @@ export default function BrickWall (x, y, rows, columns) {
   b.rows = function () { return rows }
   b.columns = function () { return columns }
   b.wall = function () { return brickWall }
-  b.hitBrick = function (row, col) { brickWall[row][col].status = false }
+  b.bricksToClear = function () { return bricksToClear }
+  b.hitBrick = function (row, col) {
+    brickWall[row][col].status = false
+    bricksToClear--
+  }
 
   b.draw = function () {
-    if (brickWall.length == 0) Wall()
+    if (bricksToClear == totalBricks) Wall()
 
     for (let r in brickWall) {
       for (let c in brickWall[r]) {

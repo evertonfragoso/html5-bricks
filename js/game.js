@@ -60,6 +60,12 @@ function drawObjects () {
 
   G.Ball.draw()
   G.Border.draw()
+
+  if (G.BrickWall.bricksToClear() == 0) {
+    G.BrickWall = new BrickWall(wallMargin, rowHeight, brickRows, brickColumns)
+    G.Ball.readyToServe = true
+  }
+
   G.BrickWall.draw()
   G.Paddle.draw()
 
