@@ -52,8 +52,9 @@ function drawMessage (message) {
   G.Context.fillText(message, posX, posY)
 }
 
-function newWall() {
-  G.BrickWall = new BrickWall(wallMargin, rowHeight, columnWidth, rowHeight, brickRows, brickColumns)
+function newWall () {
+  G.BrickWall = new BrickWall(wallMargin, rowHeight, columnWidth, rowHeight,
+    brickRows, brickColumns)
 }
 
 function gameOver () {
@@ -72,6 +73,11 @@ function drawObjects () {
 
   if (G.BrickWall.bricksToClear() == 0) {
     G.Data.Level.increase()
+    if (G.Data.Level.get() > Levels.size + 1)
+      drawMessage('Game Over! You Win! Reload to start over.')
+      return
+    }
+
     startLevel()
     G.Ball.readyToServe = true
     newWall()
